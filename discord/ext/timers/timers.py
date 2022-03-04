@@ -62,7 +62,7 @@ class Timer(ChildTimer):
 		super().__init__(name, expires, args, kwargs)
 		self._bot = bot
 		self._task = None
-		#self._steptime = args[4]
+		self._steptime = args[4]
 
 	async def internal_task(self):
 		#Add timer to asyncio.sleep
