@@ -19,13 +19,13 @@ with (ROOT / "README.md").open(encoding="utf-8") as f:
 setup(
     name="discord-timers",
     author="Lorenzo",
-    url="https://github.com/PendragonLore/discord-timers",
+    url="https://github.com/iagolirapasssos/discord-timers",
     license="MIT",
     description="Timers for bots made with discord.py",
     long_description=readme,
     long_description_content_type="text/markdown",
     project_urls={
-        "Code": "https://github.com/PendragonLore/discord-timers",
+        "Code": "https://github.com/iagolirapasssos/discord-timers",
         "Issue tracker": "https://github.com/PendragonLore/discord-timers/issues",
     },
     version=version,
@@ -41,6 +41,7 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: Implementation :: CPython",
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
