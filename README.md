@@ -31,7 +31,7 @@ class PersistentViewBot(commands.Bot):
 		)
 
 	async def on_reminder(self, channel_id, author_id, text, expires, flagevent):
-		channel = self.bot.get_channel(channel_id)
+		channel = bot.get_channel(channel_id)
 
 		duration = abs(expires - datetime.datetime.now())
 
