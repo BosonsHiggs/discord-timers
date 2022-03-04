@@ -62,7 +62,7 @@ async def remind(
 	minutes: int = Option(description="Enter with the minutes"),
 	):
 	
-	lagevent="temporaryrole"
+	flagevent="temporaryrole"
 	minutes = minutes if days is not None else 1
 
 	expires = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
