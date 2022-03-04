@@ -62,7 +62,7 @@ async def remind(
 	minutes: int = Option(description="Enter with the minutes"),
 	):
 	
-	steptime = 60 #steps in the loop
+	steptime = 1 #Time in minutes to trigger the event and send a message
 	expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=minutes)
 
 	timers.Timer(bot, "reminder", expires, args=(ctx.channel.id, ctx.author.id, text, expires, steptime)).start()
