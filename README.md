@@ -5,7 +5,7 @@ A simple extension for discord.py which provides basic timer support.
 ## Installing
 
 ```bash
-pip install git+https://github.com/iagolirapasssos/discord-timers
+pip install https://github.com/BosonsHiggs/discord-timers
 ```
 
 ## Example
