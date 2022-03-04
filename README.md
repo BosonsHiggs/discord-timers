@@ -30,14 +30,14 @@ class PersistentViewBot(commands.Bot):
 			slash_command_guilds=slash_command_guilds
 		)
 
-	async def on_reminder(channel_id, author_id, text, expires, steptime):
-		channel = bot.get_channel(channel_id)
+	async def on_reminder(self, channel_id, author_id, text, expires, flagevent):
+		channel = self.bot.get_channel(channel_id)
 
-		duration = expires - datetime.datetime.now()
+		duration = abs(expires - datetime.datetime.now())
 
-		hours, remainder = divmod(abs(int(duration.total_seconds())), 3600)
-		minutes, seconds = divmod(remainder, 60)
-		days, hours = divmod(hours, 24)
+		hours, remainder = divmod(int(duration.total_seconds()), 3600)
+		minutes, seconds = divmod(int(remainder), 60)
+		days, hours = divmod(int(hours), 24)
 
 		await channel.send("Hi, <@{0}>, {1}d, {2}h, {3}min and {4}s are left for {5}!".format(author_id, days, hours, minutes, seconds, text))
 
@@ -62,10 +62,12 @@ async def remind(
 	minutes: int = Option(description="Enter with the minutes"),
 	):
 	
-	steptime = 1 #Time in minutes to trigger the event and send a message
-	expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=minutes)
+	lagevent="temporaryrole"
+	minutes = minutes if days is not None else 1
 
-	timers.Timer(bot, "reminder", expires, args=(ctx.channel.id, ctx.author.id, text, expires, steptime)).start()
+	expires = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+
+	timers.Timer(self.bot, "reminder", expires, steptime, args=(ctx.channel.id, ctx.author.id, text, expires, flagevent)).start()
 
 	await ctx.send("Timer successfully set!")
 

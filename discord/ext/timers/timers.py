@@ -28,9 +28,9 @@ class ChildTimer:
 
 	def _convert_to_expires(self, expires):
 		if isinstance(expires, (float, int)):
-			return datetime.datetime.utcnow() + datetime.timedelta(seconds=expires)
+			return datetime.datetime.now() + datetime.timedelta(seconds=expires)
 		elif isinstance(expires, datetime.timedelta):
-			return datetime.datetime.utcnow() + expires
+			return datetime.datetime.now() + expires
 		elif isinstance(expires, datetime.datetime):
 			return expires
 		else:
@@ -58,16 +58,16 @@ class Timer(ChildTimer):
 		Same as in :meth:`TimerManager.create_timer`.
 	"""
 
-	def __init__(self, bot, name, expires, args=None, kwargs=None):
+	def __init__(self, bot, name, expires, steptime, args=None, kwargs=None):
 		super().__init__(name, expires, args, kwargs)
 		self._bot = bot
 		self._task = None
-		self._steptime = args[4]
+		self.steptime = steptime
 
 	async def internal_task(self):
 		#Add timer to asyncio.sleep
-		timein = self._steptime*60
-		sleep_time = (self._expires - datetime.datetime.utcnow()).total_seconds()
+		timein = self.steptime*60
+		sleep_time = (self._expires - datetime.datetime.now()).total_seconds()
 		steps = int(abs(sleep_time/timein))
 		diff = int(abs(sleep_time/steps))
 		
@@ -113,7 +113,7 @@ class Timer(ChildTimer):
 	@property
 	def remaining(self):
 		"""::class:`int` The amount of seconds before the timer is done."""
-		return (self._expires - datetime.datetime.utcnow()).total_seconds()
+		return (self._expires - datetime.datetime.now()).total_seconds()
 
 	async def join(self):
 		"""Wait until the timer is done.
@@ -146,7 +146,7 @@ class TimerManager:
 		while True:
 			self._current_timer = timer = await self.__timers.get()
 
-			time = (timer._expires - datetime.datetime.utcnow()).total_seconds()
+			time = (timer._expires - datetime.datetime.now()).total_seconds()
 
 			#Add timer to asyncio.sleep
 			await chunked_sleep(time)
