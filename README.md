@@ -30,8 +30,9 @@ class PersistentViewBot(commands.Bot):
 			slash_command_guilds=slash_command_guilds
 		)
 
-	async def on_reminder(self, channel_id, author_id, text, expires, flagevent):
-		channel = bot.get_channel(channel_id)
+	async def on_reminder(self, guild_id, channel_id, role_id, author_id, text, expires, flagevent):
+		guild = bot.get_guild(guild_id)
+		channel = guild.get_channel(channel_id)
 
 		duration = abs(expires - datetime.datetime.now())
 
@@ -39,7 +40,10 @@ class PersistentViewBot(commands.Bot):
 		minutes, seconds = divmod(int(remainder), 60)
 		days, hours = divmod(int(hours), 24)
 
-		await channel.send("Hi, <@{0}>, {1}d, {2}h, {3}min and {4}s are left for {5}!".format(author_id, days, hours, minutes, seconds, text))
+		text = f"{text}".format(author_id, days, hours, minutes, seconds)
+		text = text.replace(r'\n', '\n')
+
+		await channel.send(f"{text}".format(author_id, days, hours, minutes, seconds, text))
 
 ### Register slash command globally (1 hour)
 #bot = PersistentViewBot("", intents, True, False,  None)
@@ -62,12 +66,12 @@ async def remind(
 	minutes: int = Option(description="Enter with the minutes"),
 	):
 	
-	flagevent="temporaryrole"
+	flagevent=None
 	minutes = minutes if days is not None else 1
 
 	expires = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
 
-	timers.Timer(self.bot, "reminder", expires, steptime, args=(ctx.channel.id, ctx.author.id, text, expires, flagevent)).start()
+	timers.Timer(self.bot, "reminder", expires, steptime, args=(guild_id, channel_id, text, expires, flagevent)).start()
 
 	await ctx.send("Timer successfully set!")
 

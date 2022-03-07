@@ -66,14 +66,23 @@ class Timer(ChildTimer):
 
 	async def internal_task(self):
 		#Add timer to asyncio.sleep
-		timein = self.steptime*60
-		sleep_time = (self._expires - datetime.datetime.now()).total_seconds()
-		steps = int(abs(sleep_time/timein))
-		diff = int(abs(sleep_time/steps))
+		timein = self.steptime #steps in the loop
+		sleep_time = abs(self._expires - datetime.datetime.now()).total_seconds()
+		steps = int(abs(round(sleep_time/timein)))
+		diff = abs(sleep_time/steps) if steps > 0 else 1
+		rest = abs(sleep_time%steps) if steps > 0 else 0
 		
 		#Loop to based on user-entered steps
+		self._bot.dispatch(self.name, *self._args, **self._kwargs)
+
 		for time in range(steps):
+			## calling asyncio
 			await chunked_sleep(diff)
+			#trigger the event
+			self._bot.dispatch(self.name, *self._args, **self._kwargs)
+		if rest > 0:
+			## calling asyncio
+			await chunked_sleep(rest)
 			#trigger the event
 			self._bot.dispatch(self.name, *self._args, **self._kwargs)
 
